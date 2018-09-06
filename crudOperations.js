@@ -63,7 +63,7 @@ function createNew() {
     let address = $('#addressInput').val();
     let creator = sessionStorage.getItem('username');
     if(!surName){
-     surName = "";
+     surName = " ";
     }
     let data = {
         firstName,
