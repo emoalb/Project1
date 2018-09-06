@@ -1,8 +1,8 @@
 const BASE_URL = 'https://baas.kinvey.com/';
 const APP_KEY = 'kid_HkwP4Zk_Q';
 const APP_SECRET = '0384210d71fd41a4967239846cbf0dab';
-const AUTH_HEADERS = {'Authorization': "Basic " + btoa(APP_KEY + ":" + APP_SECRET)}
-const BOOKS_PER_PAGE = 10
+const AUTH_HEADERS = {'Authorization': "Basic " + btoa(APP_KEY + ":" + APP_SECRET)};
+const BOOKS_PER_PAGE = 10;
 
 function loginUser() {
     let username = $('#userNameInputLogin').val();
@@ -57,16 +57,28 @@ function registerUser() {
 */
 
 function createNew() {
-    let author = $('#formCreateNew input[name=author]').val()
-    let title = $('#formCreateNew input[name=title]').val()
-    let description = $('#formCreateNew textarea[name=description]').val()
+    let firstName = $('#firstNameInput').val();
+    let surName = $('#surNameInput').val();
+    let phoneNumber = $('#phoneNumberInput').val();
+    let address = $('#addressInput').val();
+    let creator = sessionStorage.getItem('username');
+    if(!surName){
+     surName = "";
+    }
+    let data = {
+        firstName,
+        surName,
+        phoneNumber,
+        address,
+        creator
+    };
     $.ajax({
         method: 'POST',
-        url: BASE_URL + 'appdata/' + APP_KEY + '/books',
-        data: {author, title, description},
+        url: BASE_URL + 'appdata/' + APP_KEY + '/phones',
+        data: data,
         headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')}
-    }).then(function (res) {
-       // listBooks()
+    }).then(function () {
+      showHomeView();
         showInfo('Book created.')
     }).catch(handleAjaxError)
 }
@@ -170,10 +182,10 @@ function displayPaginationAndBooks(books) {
 }
 */
 function handleAjaxError(response) {
-    let errorMsg = JSON.stringify(response)
+    let errorMsg = JSON.stringify(response);
     if (response.readyState === 0)
-        errorMsg = "Cannot connect due to network error."
+        errorMsg = "Cannot connect due to network error.";
     if (response.responseJSON && response.responseJSON.description)
-        errorMsg = response.responseJSON.description
+        errorMsg = response.responseJSON.description;
     showError(errorMsg)
 }
