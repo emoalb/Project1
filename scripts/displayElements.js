@@ -2,7 +2,7 @@ function showView(viewName)
 {
     $('.container > section').hide(); // Hide all views
     $('#infoBox,#errorBox,#loadingBox').hide();
-    $('#' + viewName).show() // Show the selected view only
+    $('#' + viewName).show(); // Show the selected view only
 }
 function showHideMenuLinks() {
     $("#linkHome").show();
@@ -11,10 +11,9 @@ function showHideMenuLinks() {
         $("#linkRegister").show();
         $("#linkCreateNew").hide();
         $("#linkLogout").hide();
-        $('#loggedInUser').text('')
-    } else {
+        $('#loggedInUser').text('');
+    } else {    // We have logged in user
         let lowerCaseValidator = /[a-z]/;
-        // We have logged in user
         let userName = sessionStorage.getItem('username');
         if(lowerCaseValidator.test(userName[0])){
         userName=userName[0].toUpperCase()+userName.slice(1);
@@ -24,7 +23,7 @@ function showHideMenuLinks() {
         $("#linkCreateBook").show();
         $("#linkCreateNew").show();
         $("#linkLogout").show();
-        $('#loggedInUser').text("Welcome, " + userName + "!")
+        $('#loggedInUser').text("Welcome, " + userName + "!");
     }
 }
 
@@ -33,8 +32,8 @@ function showInfo(message) {
     infoBox.text(message);
     infoBox.show();
     setTimeout(function() {
-        $('#infoBox').fadeOut()
-    }, 3000)
+        $('#infoBox').fadeOut();
+    }, 3000);
 }
 
 function showError(errorMsg) {
@@ -42,8 +41,8 @@ function showError(errorMsg) {
     errorBox.text("Error: " + errorMsg);
     errorBox.show();
     setTimeout(function() {
-        $('#errorBox').fadeOut()
-    }, 3000)
+        $('#errorBox').fadeOut();
+    }, 3000);
 }
 
 function showHomeView() {
@@ -57,12 +56,12 @@ function showLoginView() {
 
 function showRegisterView() {
 
-    showView('viewRegister')
+    showView('viewRegister');
 }
 
 function showCreateNewView() {
     $('#formCreateNew').trigger('reset');
-    showView('viewCreateNew')
+    showView('viewCreateNew');
 }
 function showEditView(contact) {
     $('#formEdit').trigger('reset');

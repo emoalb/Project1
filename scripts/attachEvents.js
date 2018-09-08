@@ -16,13 +16,13 @@ function attachAllEvents() {
 
     $(document).on({
         ajaxStart: function () {
-            $("#loadingBox").show()
+            $("#loadingBox").show();
         },
         ajaxStop: function () {
-            $("#loadingBox").hide()
+            $("#loadingBox").hide();
         }
     });
     $("#infoBox, #errorBox").on('click', function() {
-        $(this).fadeOut()
+        $(this).fadeOut();
     });
 }

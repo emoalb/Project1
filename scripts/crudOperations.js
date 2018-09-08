@@ -85,7 +85,7 @@ function postEdit() {
         url: BASE_URL + 'appdata/' + APP_KEY + '/phones/' + editedContent._id,
         headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')},
         data: {address:editedContent.address,firstName:editedContent.firstName,surName:editedContent.surName,phoneNumber:editedContent.phoneNumber,creator:editedContent.creator}
-    }).then(function (res) {
+    }).then(function () {
         showInfo('Edited.');
         showHomeView();
     }).catch(handleAjaxError);
@@ -121,14 +121,14 @@ function getAll() {
                 showEditView(contact);
                 })).append(
                     $(`<a href="#">[Delete]</a>`).on('click', function () {
-                        deleteContact(contact)
+                        deleteContact(contact);
                     })
 )                }
                cat.append(tr);
             }
             showView('viewHome');
-            console.log(res)
-        }).catch(handleAjaxError)
+            console.log(res);
+        }).catch(handleAjaxError);
     }
 }
     function logoutUser() {
