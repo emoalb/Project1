@@ -8,6 +8,7 @@ function attachAllEvents() {
     $("#formLogin").on('submit', loginUser);
     $("#formRegister").on('submit', registerUser);
     $("#formCreateNew").on('submit', createNew);
+    $("#formEdit").on('submit',postEdit);
 
     $("form").on('submit', function (event) {
         event.preventDefault()

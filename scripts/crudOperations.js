@@ -2,10 +2,9 @@ const BASE_URL = 'https://baas.kinvey.com/';
 const APP_KEY = 'kid_HkwP4Zk_Q';
 const APP_SECRET = '0384210d71fd41a4967239846cbf0dab';
 const AUTH_HEADERS = {'Authorization': "Basic " + btoa(APP_KEY + ":" + APP_SECRET)};
-const BOOKS_PER_PAGE = 10;
 
 function loginUser() {
-    let username = $('#userNameInputLogin').val();
+    let username = $('#userNameInputLogin').val().toLowerCase();
     let password = $('#inputPasswordLogin').val();
 
     $.ajax({
@@ -21,7 +20,7 @@ function loginUser() {
 
 function registerUser() {
     let regexValidator = /[A-Za-z]/;
-    let username = $('#userNameInputRegister').val();
+    let username = $('#userNameInputRegister').val().toLowerCase();
     let password = $('#inputPasswordRegister').val();
     let repeat = $('#repeatPasswordRegister').val();
     if (repeat !== password) {
@@ -29,7 +28,6 @@ function registerUser() {
     }else if(password.length<3){
         showError("Passwords should be at least 3 characters!");
     }else if(!username.match(regexValidator)){
-
         showError("User Name should contain only letters!");
     }
     else {
@@ -45,16 +43,6 @@ function registerUser() {
     }
 }
 
-/* function listBooks() {
-    $.ajax({
-        url: BASE_URL + 'appdata/' + APP_KEY + '/books',
-        headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')}
-    }).then(function (res) {
-        showView('viewBooks')
-        displayPaginationAndBooks(res.reverse())
-    }).catch(handleAjaxError)
-}
-*/
 
 function createNew() {
     let firstName = $('#firstNameInput').val();
@@ -78,26 +66,73 @@ function createNew() {
         data: data,
         headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')}
     }).then(function () {
-      showHomeView();
+        showHomeView();
         showInfo('Book created.')
+    }).catch(handleAjaxError)
+}
+function loadForEdit(contact) {
+    $('#addressInputEdit').val(contact.address);
+    $('#firstNameInputEdit').val(contact.firstName);
+    $('#surNameInputEdit').val(contact.surName);
+    $('#phoneNumberInputEdit').val(contact.phoneNumber);
+    $('#idEdit').val(contact._id);
+    showView('viewEdit');
+    }
+
+function postEdit() {
+    let editedContent  = {};
+    editedContent._id =  $('#idEdit').val();
+    editedContent.address = $('#addressInputEdit').val();
+    editedContent.firstName = $('#firstNameInputEdit').val();
+    editedContent.surName = $('#surNameInputEdit').val();
+    editedContent.phoneNumber = $('#phoneNumberInputEdit').val();
+    editedContent.creator = sessionStorage.getItem('username');
+    $.ajax({
+        method: 'PUT',
+        url: BASE_URL + 'appdata/' + APP_KEY + '/phones/' + editedContent._id,
+        headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')},
+        data: {address:editedContent.address,firstName:editedContent.firstName,surName:editedContent.surName,phoneNumber:editedContent.phoneNumber,creator:editedContent.creator}
+    }).then(function (res) {
+        showInfo('Edited.');
+        showHomeView();
+    }).catch(handleAjaxError);
+
+}
+
+function deleteContact(contact) {
+    $.ajax({
+        method: 'DELETE',
+        url: BASE_URL + 'appdata/' + APP_KEY + '/phones/'+ contact._id,
+        headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')}
+    }).then(function () {
+        showHomeView();
+        showInfo("Contact deleted!")
     }).catch(handleAjaxError)
 }
 
 function getAll() {
-    if(sessionStorage.getItem('authToken')===null){
-
+    let cat = $('#catalog');
+    cat.empty();
+    if(!sessionStorage.getItem('authToken')){
         showView('viewHome');
     }else {
-
         $.ajax({
             url: BASE_URL + 'appdata/' + APP_KEY + '/phones',
             headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')}
         }).then(function (res) {
-            let cat = $('#catalog');
-            cat.empty();
+
             for (let contact of res) {
                 let tr = $('<tr>');
                 tr.append(`<th>${contact.firstName}</th><th>${contact.surName}</th><th>${contact.address}</th><th>${contact.phoneNumber}</th><th>${contact.creator}</th>`);
+                if(contact._acl.creator === sessionStorage.getItem('userId')){
+                tr.append(   $(`<a href="#">[Edit]</a>`).on('click', function () {
+                loadForEdit(contact);
+                })).append(
+                    $(`<a href="#">[Delete]</a>`).on('click', function () {
+                        deleteContact(contact)
+                    })
+)
+                }
                cat.append(tr);
             }
             showView('viewHome');
@@ -105,11 +140,11 @@ function getAll() {
         }).catch(handleAjaxError)
     }
 }
-function logoutUser() {
+    function logoutUser() {
     sessionStorage.clear();
-    showHomeView();
     showHideMenuLinks();
-    showInfo('Logout successful.')
+    showHomeView();
+    showInfo('Logout successful.');
 }
 
 function signInUser(res, message) {
@@ -118,7 +153,7 @@ function signInUser(res, message) {
     sessionStorage.setItem('userId', res._id);
     showHomeView();
     showHideMenuLinks();
-    showInfo(message)
+    showInfo(message);
 }
 
 function handleAjaxError(response) {
@@ -127,5 +162,5 @@ function handleAjaxError(response) {
         errorMsg = "Cannot connect due to network error.";
     if (response.responseJSON && response.responseJSON.description)
         errorMsg = response.responseJSON.description;
-    showError(errorMsg)
+    showError(errorMsg);
 }
