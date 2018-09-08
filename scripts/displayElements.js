@@ -12,13 +12,21 @@ function showHideMenuLinks() {
         $("#linkCreateNew").hide();
         $("#linkLogout").hide();
         $('#loggedInUser').text('')
-    } else { // We have logged in user
+    } else {
+        let lowerCaseValidator = /[a-z]/;
+        // We have logged in user
+        let userName = sessionStorage.getItem('username');
+
+        if(lowerCaseValidator.test(userName[0])){
+        userName=userName[0].toUpperCase()+userName.slice(1);
+            console.log(userName);
+        }
         $("#linkLogin").hide();
         $("#linkRegister").hide();
         $("#linkCreateBook").show();
         $("#linkCreateNew").show();
         $("#linkLogout").show();
-        $('#loggedInUser').text("Welcome, " + sessionStorage.getItem('username') + "!")
+        $('#loggedInUser').text("Welcome, " + userName + "!")
     }
 }
 
