@@ -115,12 +115,14 @@ function getAll() {
 
             for (let contact of res) {
                 let tr = $('<tr>');
-                tr.append(`<th>${contact.firstName}</th><th>${contact.surName}</th><th>${contact.address}</th><th>${contact.phoneNumber}</th><th>${contact.creator}</th>`);
+                    tr.append(`<th>${contact.firstName}</th>`)
+                    .append(`<th>${contact.surName}</th>`).append(`<th>${contact.address}</th>`)
+                    .append(`<th>${contact.phoneNumber}</th>`).append(`<th>${contact.creator}</th>`);
                 if(contact._acl.creator === sessionStorage.getItem('userId')){
-                tr.append(   $(`<a href="#">[Edit]</a>`).on('click', function () {
+                     tr.append(   $(`<button class="btn btn-outline-warning m-1">Edit</button>`).on('click', function () {
                 showEditView(contact);
                 })).append(
-                    $(`<a href="#">[Delete]</a>`).on('click', function () {
+                    $(`<button class="btn btn-outline-danger m-1">Delete</button>`).on('click', function () {
                         deleteContact(contact);
                     })
 )                }
@@ -132,10 +134,17 @@ function getAll() {
     }
 }
     function logoutUser() {
-    sessionStorage.clear();
-    showHideMenuLinks();
-    showHomeView();
-    showInfo('Logout successful.');
+        $.ajax({
+            method: 'POST',
+            url: BASE_URL + 'user/' + APP_KEY + '/_logout',
+            headers: {'Authorization': 'Kinvey ' + sessionStorage.getItem('authToken')}
+        }).then(function () {
+            sessionStorage.clear();
+            showHideMenuLinks();
+            showHomeView();
+            showInfo('Logout successful.');
+        }).catch(handleAjaxError);
+
 }
 
 function signInUser(res, message) {
