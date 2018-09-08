@@ -126,6 +126,7 @@ function getAll() {
                         deleteContact(contact);
                     })
 )                }
+
                cat.append(tr);
             }
             showView('viewHome');
