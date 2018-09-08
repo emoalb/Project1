@@ -16,10 +16,8 @@ function showHideMenuLinks() {
         let lowerCaseValidator = /[a-z]/;
         // We have logged in user
         let userName = sessionStorage.getItem('username');
-
         if(lowerCaseValidator.test(userName[0])){
         userName=userName[0].toUpperCase()+userName.slice(1);
-            console.log(userName);
         }
         $("#linkLogin").hide();
         $("#linkRegister").hide();
@@ -58,11 +56,20 @@ function showLoginView() {
 }
 
 function showRegisterView() {
-    $('#formRegister').trigger('reset');
+
     showView('viewRegister')
 }
 
 function showCreateNewView() {
     $('#formCreateNew').trigger('reset');
     showView('viewCreateNew')
+}
+function showEditView(contact) {
+    $('#formEdit').trigger('reset');
+    $('#addressInputEdit').val(contact.address);
+    $('#firstNameInputEdit').val(contact.firstName);
+    $('#surNameInputEdit').val(contact.surName);
+    $('#phoneNumberInputEdit').val(contact.phoneNumber);
+    $('#idEdit').val(contact._id);
+    showView('viewEdit');
 }

@@ -70,14 +70,7 @@ function createNew() {
         showInfo('Book created.')
     }).catch(handleAjaxError)
 }
-function loadForEdit(contact) {
-    $('#addressInputEdit').val(contact.address);
-    $('#firstNameInputEdit').val(contact.firstName);
-    $('#surNameInputEdit').val(contact.surName);
-    $('#phoneNumberInputEdit').val(contact.phoneNumber);
-    $('#idEdit').val(contact._id);
-    showView('viewEdit');
-    }
+
 
 function postEdit() {
     let editedContent  = {};
@@ -125,7 +118,7 @@ function getAll() {
                 tr.append(`<th>${contact.firstName}</th><th>${contact.surName}</th><th>${contact.address}</th><th>${contact.phoneNumber}</th><th>${contact.creator}</th>`);
                 if(contact._acl.creator === sessionStorage.getItem('userId')){
                 tr.append(   $(`<a href="#">[Edit]</a>`).on('click', function () {
-                loadForEdit(contact);
+                showEditView(contact);
                 })).append(
                     $(`<a href="#">[Delete]</a>`).on('click', function () {
                         deleteContact(contact)
