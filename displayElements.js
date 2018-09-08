@@ -41,7 +41,7 @@ function showError(errorMsg) {
 }
 
 function showHomeView() {
-    showView('viewHome');
+    getAll();
 }
 
 function showLoginView() {

@@ -1,6 +1,6 @@
 function startApp() {
 showHideMenuLinks();
-showView('viewHome');
+showHomeView();
 attachAllEvents();
 
 }
