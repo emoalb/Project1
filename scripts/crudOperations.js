@@ -96,7 +96,6 @@ function postEdit() {
         showInfo('Edited.');
         showHomeView();
     }).catch(handleAjaxError);
-
 }
 
 function deleteContact(contact) {
@@ -131,8 +130,7 @@ function getAll() {
                     $(`<a href="#">[Delete]</a>`).on('click', function () {
                         deleteContact(contact)
                     })
-)
-                }
+)                }
                cat.append(tr);
             }
             showView('viewHome');
